@@ -26,17 +26,16 @@ class Game{
                 form = new Form()
                 form.display();
             }
-    player1 = createSprite(200,500);
-    player1.addImage("player1",player_img);
-    
-    player2 = createSprite(800,500);
-    player2.addImage("player2", player_img);
-    players=[player1,player2];
+        player1 = createSprite(200,500);
+        player1.addImage("player1",player_img);
+        
+        player2 = createSprite(800,500);
+        player2.addImage("player2", player_img);
+        players=[player1,player2];
 
         }
     
     play(){
-        
         form.hide();
 
         Player.getPlayerInfo();
@@ -62,6 +61,10 @@ class Game{
                 text(allPlayers[plr].name,x-25,y+25);
             }
 
+            textSize(25);
+            fill("white");
+            text(allPlayers.player1.name + ": " +allPlayers.player1.score,50,50);
+            text(allPlayers.player2.name + ": " + allPlayers.player2.score,50,100);
         }
 
         //give movements for the players using arrow keys
@@ -81,7 +84,6 @@ class Game{
             fruits.velocityY = 6;
             var rand = Math.round(random(1,5));
             switch(rand) {
-                //apple
                 case 1: fruits.addImage("fruit1",fruit1_img);
                 break;
                 case 2: fruits.addImage("fruit2",fruit2_img);
@@ -95,9 +97,28 @@ class Game{
             }
             fruitGroup.add(fruits);
         }
+
+        if(player.index !== null) {
+            for(var i = 0; i < fruitGroup.length; i++) {
+                if(fruitGroup.get(i).isTouching(players)) {
+                    fruitGroup.get(i).destroy();
+                    player.score = player.score + 1;
+                    player.update();
+                }
+            }
+        }
+
+        if(player.score >= 20) {
+            this.end();
+        }
     }
 
     end() {
        console.log("Game Ended");
+       game.update(2);
+       clear();
+       fill("red");
+       textSize(60);
+       text("Game Over",350,250);
     }
 }
